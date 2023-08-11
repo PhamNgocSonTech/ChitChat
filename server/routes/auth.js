@@ -3,8 +3,6 @@ const router = express.Router();
 const {
     checkRegistrationFields,
     checkLoginFields,
-    createErrorObject,
-    // customSocialAuthenticate
 } = require ('../middleware/authenticate')
 
 const {

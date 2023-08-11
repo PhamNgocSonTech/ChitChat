@@ -1,8 +1,7 @@
 const passport = require('passport');
 const {User} = require('../models/User');
-const { body } = require('express-validator');
+const { check, validationResult} = require('express-validator');
 // const expressValidator = require('express-validator');
-
 
 const createErrorObject = errors => {
     const errorObject = [];
@@ -15,17 +14,16 @@ const createErrorObject = errors => {
     return errorObject;
 }
 
-
 const checkRegistrationFields = async (req, res, next) => {
-    req.check('username')
+    await check('username')
         .isString()
         .isLength({min: 5, max: 15})
         .withMessage('Username must be between 5 and 15 characters')
-    req.check('password')
+    await check('password')
         .isString()
         .isLength({min: 5, max: 15})
         .withMessage('Password must be between 5 and 15 characters');
-    let errors = req.validationErrors() || [];
+    let errors = validationResult(req).array() || [];
     const user = await User.findOne({username: req.body.username});
     if (user) {
         errors.push({param: 'username', msg: 'Username already taken'});
@@ -43,10 +41,10 @@ const checkLoginFields = async (req, res, next) => {
     let errors = [];
     const user = await User.findOne({email: req.body.email});
     if(!user) {
-        errors.push({params: 'email', msg: 'Invalid Entered'});
+        errors.push({params: 'email', msg: 'Invalid Email'});
     }else{
         if(req.body.password !== null && !(await user.isValidPassword(req.body.password))) {
-            errors.push({param: 'password', msg: 'Invalid Entered'});
+            errors.push({param: 'password', msg: 'Invalid Password'});
         }
     }
     if(errors.length !== 0) {
@@ -60,24 +58,24 @@ const checkLoginFields = async (req, res, next) => {
 
 const checkCreateRoomFields = async (req, res, next) => {
     if(!req.body.room_name) {
-        req.check('room_name')
+        await check('room_name')
             .not()
             .isEmpty()
             .withMessage('Room name is required')
     }else{
-        req.check('room_name')
+        await check('room_name')
             .isString()
             .isLength({min: 3, max: 20})
             .withMessage('Room name must be between 5 and 15 characters')
     }
     if(req.body.password) {
-        req.check('password')
+        await check('password')
             .not()
             .isEmpty()
             .isLength({min: 5, max: 20})
             .withMessage('Room name must be between 5 and 15 characters')
     }
-    const errors = req.validationErrors();
+    const errors = validationResult(req).array();
     if(errors) {
         res.send({
             errors: createErrorObject()
