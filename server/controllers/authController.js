@@ -17,7 +17,6 @@ const registerUser =  (req, res) => {
             errorsArr.push({param: 'email', msg: 'Email is already taken'});
             if(user.username === req.body.username) {
                 errorsArr.push({param: 'username', msg: 'Username is already taken'});
-
             }
             res.send({
                 errors: createErrorObject(errorsArr)

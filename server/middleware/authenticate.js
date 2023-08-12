@@ -65,8 +65,8 @@ const checkCreateRoomFields = async (req, res, next) => {
     }else{
         await check('room_name')
             .isString()
-            .isLength({min: 3, max: 20})
-            .withMessage('Room name must be between 5 and 15 characters')
+            .isLength({min: 3, max: 10})
+            .withMessage('Room name must be between 3 and 10 characters')
     }
     if(req.body.password) {
         await check('password')
@@ -78,7 +78,7 @@ const checkCreateRoomFields = async (req, res, next) => {
     const errors = validationResult(req).array();
     if(errors) {
         res.send({
-            errors: createErrorObject()
+            errors: createErrorObject(errors)
         })
     }else{
         next()
