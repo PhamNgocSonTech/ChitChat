@@ -7,7 +7,7 @@
       <div class="section__content">
         <form @submit.prevent="handleSubmit" class="form">
           <p class="lead">Edit Profile Details</p>
-          <div class="profile__item" v-if="user.social.id">
+          <div class="profile__item" v-if="user.social.id === null">
             <img :src="user.image" alt class="profile__image" />
           </div>
           <div class="profile__item" v-else>
@@ -25,7 +25,7 @@
             />
             <label for="username" class="form__label">Display Handle</label>
           </div>
-          <div class="form__input-group" v-if="getUser.social.id === null">
+          <div class="form__input-group" v-if="user.social.id === null">
             <ion-icon name="mail" class="form__icon"></ion-icon>
             <input
                 type="email"
@@ -95,8 +95,7 @@ export default {
 
       const handleSubmit = () => {
         const updateUserDetails = {
-          handle:
-            handle.value === getUser.value.handle ? null : slugify(handle.value.toLowerCase()),
+          handle: handle.value === getUser.value.handle ? null : slugify(this.handle.toLowerCase()),
           email: email.value === getUser.value.email ? null : email.value,
           location: location.value === getUser.value.location ? null : location.value,
         };
@@ -119,9 +118,9 @@ export default {
                       name: 'UserProfile',
                       params: {
                         handle:
-                        updateUserDetails.handle === null
-                          ? getUser.value.handle
-                          : updateUserDetails.handle
+                            updateUserDetails.handle === null
+                                ? getUser.value.handle
+                                : updateUserDetails.handle
                       }
                     })
                   }
@@ -137,26 +136,38 @@ export default {
 
       // onMounted(() => {
         if(localStorage.getItem('authToken') && _.isEmpty(getUser.value)) {
-            axios.get('/api/user/getCurrentUser')
+            axios.get(`/api/user/getCurrentUser`)
                 .then((res) => {
                     store.dispatch('saveUserData', res.data);
                     store.dispatch('toggleAuthState', true);
                     user.value = res.data;
                 })
                 .catch(err => err)
+
         }else{
           user.value = getUser.value
         }
         /** Assign model values */
-        const userKey = Object.keys(getUser.value)
-        for(let key of userKey ) {
-          if(userKey.includes[key]) {
-            this[key] = getUser.value[key];
+        const data = ref(getUser.value);
+        for (const key in getUser) {
+          if (getUser[key]) {
+            data.value[key] = getUser[key];
           }
         }
+      //   const data = Object.keys(getUser.value);
+      //   for (const key of data) {
+      //     if(getUser.value[key]) {
+      //     data[key] = getUser.value[key];
+      //     }
+      // }
+        // const userKey = Object.keys(getUser.value)
+        // for(const key of userKey ) {
+        //   if(userKey.includes[key]) {
+        //     this[key] = getUser.value[key];
+        //   }
+        // }
       // })
       return {
-        // store,
         user,
         getUser,
         isAuthorized,

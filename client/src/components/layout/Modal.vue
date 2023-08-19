@@ -25,25 +25,35 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 
 export default {
   name: 'Modal',
-
   props: {
     name: String
   },
-
-  setup() {
+  setup(props) {
     const visible = ref(false);
-
+    const nameProps = ref(props.name)
+    const modalData = computed(() => visible.value)
     const close = () => {
       visible.value = false;
     };
 
+    const open = () => {
+      visible.value = true;
+    };
+
+    const setData = (key, value) => {
+      visible.value[key] = value
+    }
     return {
       visible,
-      close
+      close,
+      open,
+      nameProps,
+      modalData,
+      setData
     };
   }
 };

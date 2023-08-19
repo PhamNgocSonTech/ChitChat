@@ -76,7 +76,8 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
+import {ref, computed} from "vue";
+import _ from 'lodash';
 import axios from "axios";
 import { useStore } from "vuex";
 import Modal from "../layout/Modal.vue";
@@ -88,22 +89,20 @@ export default {
   setup() {
     const store = useStore();
     const user = ref(null);
+    const deleteUser = ref(null);
     const getUserData = computed(() => store.getters.getUserData);
     const isAuthorized = computed(() => store.getters.isAuthorized);
 
     const handleDeleteModal = () => {
-      deleteUserModal.value.open();
+      deleteUser.value.open();
     };
 
     const handleDelete = () => {
-      deleteUserModal.value.close();
+      deleteUser.value.close();
       store.dispatch("deleteUserAccount");
     };
 
-    const deleteUserModal = ref(null);
-
-    onMounted(() => {
-      if (localStorage.getItem("authToken") && !getUserData.value) {
+      if (localStorage.getItem("authToken") && _.isEmpty(getUserData.value)) {
         axios
           .get(`/api/user/getCurrentUser`)
           .then((res) => {
@@ -115,14 +114,12 @@ export default {
       } else {
         user.value = getUserData.value;
       }
-    });
-
     return {
       user,
       isAuthorized,
       handleDeleteModal,
       handleDelete,
-      deleteUserModal,
+      deleteUser,
     };
   },
 };

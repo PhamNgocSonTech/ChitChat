@@ -60,7 +60,7 @@ const stores = {
         RESET_STATE: (state) => {
             state.authState = false;
             state.authUser = {};
-            state.currenRoom = null;
+            state.currentRoom = null;
             state.rooms = []
         }
     },
@@ -103,7 +103,7 @@ const stores = {
         },
 
         deleteUserAccount: (context) => {
-            axios.delete('/api/user/getCurrentUser').then(() => {
+            axios.delete('/api/user/deleteUser').then(() => {
             context.commit('RESET_STATE');
             localStorage.clear();
             router.push({name: 'Login'})
