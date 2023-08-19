@@ -12,7 +12,7 @@ const {
 
 router.get('/getAllUsers', passport.authenticate('jwt', { session: false }),  getAllUsers)
 router.put('/updateUser', [passport.authenticate('jwt', { session: false }), checkEditProfileFields], updateUser)
-router.get('/getUser', passport.authenticate('jwt', { session: false }), getCurrentUser)
+router.get('/getCurrentUser', passport.authenticate('jwt', { session: false }), getCurrentUser)
 router.delete('/deleteUser', passport.authenticate('jwt', { session: false }), deleteCurrentUser)
 
 module.exports = router;
