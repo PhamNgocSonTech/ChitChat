@@ -11,7 +11,6 @@
       <router-view/>
     </transition>
     <Footer v-if="['Home', 'Login', 'Register', 'About'].includes($route.name)"/>
-<!--    <Footer/>-->
   </div>
 </template>
 

@@ -1,4 +1,4 @@
-<template v-slot:footer>
+<template>
   <transition name="fade">
     <div v-show="visible" class="modal">
       <transition name="slideDown">
@@ -26,6 +26,7 @@
 
 <script>
 import {computed, ref} from 'vue';
+// import {ref} from 'vue';
 
 export default {
   name: 'Modal',
@@ -35,6 +36,7 @@ export default {
   setup(props) {
     const visible = ref(false);
     const nameProps = ref(props.name)
+    // const modalData = ref({})
     const modalData = computed(() => visible.value)
     const close = () => {
       visible.value = false;
@@ -121,5 +123,4 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/component/modal.scss';
-
 </style>

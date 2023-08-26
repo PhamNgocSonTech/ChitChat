@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import {ref, onMounted, watch, computed} from "vue";
+import {ref, onMounted} from "vue";
 
 export default {
   name: 'Sidebar',
@@ -28,7 +28,7 @@ export default {
       visible.value = !visible.value
     };
 
-    const shouldShowSidebar = computed(() => window.innerWidth >= 768 || visible.value);
+    // const shouldShowSidebar = computed(() => window.innerWidth >= 768 || visible.value);
 
     const handleResize = () => {
       visible.value = window.innerWidth >= 768
@@ -38,11 +38,11 @@ export default {
       window.addEventListener('resize', handleResize);
     })
 
-    watch(shouldShowSidebar, (newValue) => {
-      if(!newValue) {
-        visible.value = false;
-      }
-    });
+    // watch(shouldShowSidebar, (newValue) => {
+    //   if(!newValue) {
+    //     visible.value = false;
+    //   }
+    // });
     return {
       visible,
       toggle

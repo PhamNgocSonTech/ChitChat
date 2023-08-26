@@ -4,14 +4,18 @@ import Router from './router/router'
 import Store from './store/store'
 import setAuthToken from "@/utils/authToken";
 import axios from "axios";
-import store from "./store/store";
 import router from "./router/router";
-// import { IonicVue } from '@ionic/vue';
-/* Core CSS required for Ionic components to work properly */
-// import '@ionic/vue/css/core.css';
-//
+// import {io} from 'socket.io-client';
+import moment from "moment";
+const io = require("socket.io-client");
 
-const app = createApp(App)
+let socket = null
+socket = io("http://localhost:5000", {
+    withCredentials: true,
+});
+Store.dispatch('assignSocket', socket)
+console.log(socket)
+
 /** Check for auth token on refresh and set authorization header for incoming requests */
 if (localStorage.authToken) {
     setAuthToken(localStorage.authToken);
@@ -41,7 +45,7 @@ axios.interceptors.response.use(
     function(err) {
         if (err.response.status === 401) {
             localStorage.removeItem('authToken');
-            store.dispatch('toggleAuthState', false);
+            Store.dispatch('toggleAuthState', false);
             router.push({
                 name: 'Login',
                 params: { message: 'Session has expired, please login again' }
@@ -50,8 +54,12 @@ axios.interceptors.response.use(
         return Promise.reject(err);
     }
 );
-app.config.isCustomElement = (tag) => tag.startsWith('ion-')
 
+const app = createApp(App)
+app.config.isCustomElement = (tag) => tag.startsWith('ion-')
+app.config.globalProperties.$socket = socket;
+
+app.provide("moment", moment)
 app.use(Router)
 app.use(Store)
 app.mount('#app')

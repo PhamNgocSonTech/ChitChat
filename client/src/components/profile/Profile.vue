@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-import {ref, computed, onMounted} from "vue";
+import {ref, computed} from "vue";
 import axios from "axios";
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
@@ -46,9 +46,9 @@ export default {
     // const userProps = ref(props.user)
     const getUser = computed(() => store.getters.getUserData);
     const isAuth = computed(() => store.getters.isAuthorized)
-    computed(() => store.dispatch('saveUserData'))
-    computed(() => store.dispatch('toggleAuthState'))
-    onMounted(() => {
+    // computed(() => store.dispatch('saveUserData'))
+    // computed(() => store.dispatch('toggleAuthState'))
+    // onMounted(() => {
       if(localStorage.getItem('authToken')) {
         axios.get(`/api/profile/${route.params.username}`)
             .then(res => {
@@ -56,7 +56,7 @@ export default {
             })
             .catch(err => err)
       }
-    })
+    // })
     return {
       router,
       user,

@@ -16,7 +16,7 @@ const stores = {
         getRoomData: state => state.rooms,
         isAuthorized: state => state.authState,
         getCurrentRoom: state => state.currentRoom,
-        getSocket: state => state.socket
+        getSocketData: state => state.socket
     },
 
     mutations: {
@@ -25,11 +25,11 @@ const stores = {
         },
 
         ASSIGN_ROOM_DATA: (state, payload) => {
-            state.room = payload;
+            state.rooms = payload;
         },
 
         ADD_ROOM: (state, payload) => {
-            state.rooms = [...payload.rooms, payload]
+            state.rooms = [...state.rooms, payload]
         },
 
         SAVE_CURRENT_ROOM: (state, payload) => {
@@ -38,7 +38,7 @@ const stores = {
 
         DELETE_ROOM: (state, payload) => {
             state.currentRoom = null;
-            state.rooms = state.rooms.filter(room => room._id !== payload._id)
+            state.rooms = state.rooms.filter((room) => room._id !== payload._id)
         },
 
         TOGGLE_AUTH_STATE: (state, payload) => {

@@ -10,7 +10,7 @@ const RoomSchema = new Schema(
             trim: true,
             unique: true,
             minLength: ['3', 'Room name should be greater than 3 characters'],
-            maxLength: ['10', 'Room name should be less than 10 characters'],
+            maxLength: ['20', 'Room name should be less than 20 characters'],
         },
         user: {
             type: Schema.Types.ObjectId,
@@ -41,7 +41,7 @@ const RoomSchema = new Schema(
                     required: true,
                     ref: 'User',
                 },
-                sockedId: {
+                socketId: {
                     type: String,
                     required: true
                 }

@@ -6,7 +6,7 @@ module.exports = {
     ADD_MESSAGE: async data => {
         const newMessage = await new Message({
             content: data.content,
-            admin: !!data.admin,
+            admin: data.admin ? true : false,
             user: data.user ? data.user._id : null,
             room: data.room._id
         }).save()
@@ -16,7 +16,7 @@ module.exports = {
         })
     },
 
-    GET_MESSAGE: async data => {
+    GET_MESSAGES: async data => {
         return Message.find({room: data.room._id}).populate('user', [
             'username',
             'social',
@@ -25,22 +25,22 @@ module.exports = {
         ]);
     },
 
-    CREATE_MESSAGE_CONTENT: async (room, socketId) => {
+    CREATE_MESSAGE_CONTENT: (room, socketId) => {
         const user = room.previous.users.find(user => user.socketId === socketId);
         return user && user.lookup.handle
-            ? `${user.lookup.handle} has left ${room.update.name}`
-            : `Unknown User has left ${room.update.name}`
+            ? `${user.lookup.handle} has left ${room.updated.name}`
+            : `Unknown User has left ${room.updated.name}`
     },
 
     GET_ROOMS: async () => {
-        return await Room.find({})
+        return Room.find({})
             .populate('user users.lookup', ['username', 'social', 'handle', 'image'])
             .select('-password')
     },
 
     GET_ROOM_USERS: async data => {
-        return await Room.findById(data.room._id)
-            .populate('user users,lookup', ['username', 'social', 'handle', 'image'])
+        return Room.findById(data.room._id)
+            .populate('user users.lookup', ['username', 'social', 'handle', 'image'])
             .select('-password');
     },
 
@@ -74,12 +74,12 @@ module.exports = {
                 });
             }
         }else{
-            return;
+            return null;
         }
     },
 
     FILTER_ROOM_USERS: async data => {
-        const room = await Room.findById(mongoose.Types.objectId(data.roomId))
+        const room = await Room.findById(new mongoose.Types.ObjectId(data.roomId))
             .select('-password')
             .populate('users.lookup', ['username', 'social','handle', 'image'])
         if(room) {
@@ -95,8 +95,5 @@ module.exports = {
             }
         }
     }
-
-
-
 }
 

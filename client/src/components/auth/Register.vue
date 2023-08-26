@@ -89,7 +89,7 @@ export default {
       const email = ref('');
       const password = ref();
       const errors = ref([]);
-      const getSocket = computed(() => store.getters.getSocket)
+      computed(() => store.getters.getSocketData)
       const handleSubmit = () => {
         errors.value = [];
         if(username.value && password.value && email.value) {
@@ -130,8 +130,7 @@ export default {
         email,
         password,
         errors,
-        getSocket,
-        handleSubmit
+        handleSubmit,
       }
     },
 

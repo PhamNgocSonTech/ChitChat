@@ -95,7 +95,7 @@ export default {
 
       const handleSubmit = () => {
         const updateUserDetails = {
-          handle: handle.value === getUser.value.handle ? null : slugify(this.handle.toLowerCase()),
+          handle: handle.value === getUser.value.handle ? null : slugify(handle.value.toLowerCase()),
           email: email.value === getUser.value.email ? null : email.value,
           location: location.value === getUser.value.location ? null : location.value,
         };
@@ -114,7 +114,7 @@ export default {
                   }else{
                     await store.dispatch('saveUserData', res.data.user);
                     user.value = res.data.user;
-                    router.push({
+                    await router.push({
                       name: 'UserProfile',
                       params: {
                         handle:
@@ -147,26 +147,17 @@ export default {
         }else{
           user.value = getUser.value
         }
+
         /** Assign model values */
-        const data = ref(getUser.value);
-        for (const key in getUser) {
-          if (getUser[key]) {
-            data.value[key] = getUser[key];
-          }
+        const keys = Object.keys(user);
+        const userData = getUser.value;
+        for (const key of keys) {
+          console.log(userData[key])
+        if (userData[key]) {
+          user[key] = userData[key];
         }
-      //   const data = Object.keys(getUser.value);
-      //   for (const key of data) {
-      //     if(getUser.value[key]) {
-      //     data[key] = getUser.value[key];
-      //     }
-      // }
-        // const userKey = Object.keys(getUser.value)
-        // for(const key of userKey ) {
-        //   if(userKey.includes[key]) {
-        //     this[key] = getUser.value[key];
-        //   }
-        // }
-      // })
+      }
+
       return {
         user,
         getUser,

@@ -20,7 +20,7 @@ const addMessage = async(req, res) => {
     }
     const newMessage = new Message({
         content: req.body.content,
-        admin: !!req.body.admin,
+        admin: req.body.admin ? true : false,
         user: req.user.id,
         room: req.body.roomId
     }).save()

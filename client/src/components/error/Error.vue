@@ -12,7 +12,7 @@
           leave-active-class="animated fadeOut"
           mode="out-in"
       >
-        <span v-for="error in errors" :key="error.key" > {{error.value}}} </span>
+        <span v-for="error in errors" :key="error.key" > {{error.value}} </span>
       </transition-group>
     </div>
     <div v-else v-show="errorMessage" class="mb-6 form__error">
@@ -29,11 +29,21 @@
 </template>
 
 <script>
-  export default {
+import {ref} from "vue";
+
+export default {
     name: 'Error',
     props: {
-      errors: Array,
-      errorMessage: String,
+      errorsProps: [],
+      message: String,
+    },
+    setup(props) {
+      const errors = ref(props.errorsProps)
+      const errorMessage = ref(props.message)
+      return {
+        errors,
+        errorMessage
+      }
     }
   }
 </script>

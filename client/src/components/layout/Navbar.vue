@@ -7,22 +7,20 @@
       </div>
       <span class="navbar__toggle">
                 <ion-icon
-                    name="menu"
+                    name="menu-outline"
                     @click="navToggleState = !navToggleState"
                     class="navbar__icon navbar__toggle--icon"
                 ></ion-icon>
             </span>
-      <ul class="navbar__nav" v-if="!isAuthorized">
+      <ul class="navbar__nav" v-if="!isAuth">
         <li class="nav__item">
-<!--          <router-link to="/" class="nav__link">Home</router-link>-->
           <router-link to="/" class="nav__link">Home</router-link>
         </li>
         <li class="nav__item">
-<!--          <router-link to="/about" class="nav__link">About</router-link>-->
           <router-link to="/about" class="nav__link">About</router-link>
         </li>
       </ul>
-      <ul class="navbar__nav navbar__nav--right" v-if="!isAuthorized">
+      <ul class="navbar__nav navbar__nav--right" v-if="!isAuth">
         <li class="nav__item">
           <a
               href="https://github.com/PhamNgocSonTech/ChitChat"
@@ -39,23 +37,22 @@
               <router-link to="/register" class="nav__link nav__link&#45;&#45;rounded">Register</router-link>
         </li>
       </ul>
-<!--      <SignedInLinks :logout="logout" :user="user" v-if="isAuthorized"/>-->
-      <SignedInLinks :logout="logout" :user="user" v-if="isAuthorized" />
+      <SignedInLinks :logout="logout" :user="user" v-if="isAuth" />
     </nav>
     <nav class="snav" :class="{'snav--shown': navToggleState}">
       <Particle name="particlejs-nav"/>
-      <ul class="snav__nav" v-if="!isAuthorized">
+      <ul class="snav__nav" v-if="!isAuth">
         <li class="snav__item" @click="closeSideNav">
           <router-link to="/" class="nav__link">Home</router-link>
         </li>
-        <li class="snav__item" @click="this.closeSideNav">
+        <li class="snav__item" @click="closeSideNav">
           <router-link to="/about" class="nav__link">About</router-link>
         </li>
-        <li class="snav__item" @click="this.closeSideNav">
+        <li class="snav__item" @click="closeSideNav">
           <router-link to="/login" class="nav__link">Login</router-link>
 
         </li>
-        <li class="snav__item" @click="this.closeSideNav">
+        <li class="snav__item" @click="closeSideNav">
           <router-link to="/register" class="nav__link">Register</router-link>
 
         </li>
@@ -70,15 +67,15 @@
         </li>
       </ul>
 
-      <ul class="snav__nav" v-if="isAuthorized">
-        <li class="snav__item" @click="this.closeSideNav">
+      <ul class="snav__nav" v-if="isAuth">
+        <li class="snav__item" @click="closeSideNav">
           <router-link
               v-if="typeof user.handle !== 'undefined'"
-              :to="{name: 'UserProfile', params: { handle: user.handle}}"
+              :to="{ name: 'UserProfile', params: { handle: user.handle } }"
               class="nav__link nav__link--rounded"
           >{{ user.handle }}</router-link>
         </li>
-        <li class="snav__item" @click="this.closeSideNav">
+        <li class="snav__item" @click="closeSideNav">
           <button
               @click.prevent="logout"
               class="nav__link nav__link--btn nav__link--rounded"
@@ -91,10 +88,8 @@
 
 <script>
 import {ref, computed} from "vue";
-// import {useRoute} from "vue-router";
 import {useStore} from "vuex";
 import router from "@/router/router";
-// import {mapGetters, mapActions} from "vuex";
 import Particle from "@/components/layout/Particle.vue";
 import SignedInLinks from "@/components/layout/SignedInLinks.vue";
 export default {
@@ -106,11 +101,10 @@ export default {
   setup() {
     const navToggleState = ref(false);
     const store = useStore();
-    // const router = useRoute();
     const user = computed(() => store.getters.getUserData)
-    const isAuthorized = computed(() => store.getters.isAuthorized)
+    const isAuth = computed(() => store.getters.isAuthorized)
     const closeSideNav = () => {
-      this.navToggleState = false
+      navToggleState.value = false
     }
     const logout = () => {
       if(localStorage.getItem('authToken')){
@@ -137,7 +131,7 @@ export default {
       }
     return {
       navToggleState,
-      isAuthorized,
+      isAuth,
       user,
       closeSideNav,
       logout,
