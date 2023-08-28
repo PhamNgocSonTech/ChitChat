@@ -3,7 +3,7 @@ require('dotenv').config();
 
 // Connect MongoDB
 const mongoose = require('mongoose');
-require ("./database/mongo")
+require ("./database/mongoose.js")
 
 /** Passport Configuration */
 const passport = require('passport');
@@ -20,9 +20,16 @@ const compression = require("compression");
 // const enforce = require("express-sslify")
 
 // SOCKET IO
-const app = require("express")();
+const app = express();
 const httpServer = require("http").createServer(app);
-// const io = require("socket.io")(httpServer);
+const io = require("socket.io")(httpServer, {
+    cors: {
+        origin: "http://localhost:8080",
+        methods: ["GET", "POST"],
+        // methods: ["PUT", "GET", "POST", "DELETE", "OPTIONS"],
+        // credentials: true
+    }
+});
 
 const {
     ADD_MESSAGE,
@@ -49,14 +56,6 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(passport.initialize());
-
-const io = require("socket.io")(httpServer, {
-    cors: {
-        origin: "http://localhost:8080",
-        methods: ["GET", "POST"],
-        credentials: true
-    }
-});
 app.set('io', io);
 
 // ROUTES DEFINE
@@ -75,50 +74,51 @@ io.on('connection', socket => {
 
     /** Socket Events */
     socket.on('disconnect', async () => {
-        if (currentRoomId) {
-            /** Filter through users and remove user from user list in that room */
-            const roomState = await FILTER_ROOM_USERS({
-                roomId: currentRoomId,
-                socketId: socket.id
-            });
+        try {
+            if (currentRoomId) {
+                console.log("currentRoomId", currentRoomId)
+                /** Filter through users and remove user from user list in that room */
+                const roomState = await FILTER_ROOM_USERS({
+                    roomId: currentRoomId,
+                    socketId: socket.id
+                });
 
-            socket.broadcast.to(currentRoomId).emit(
-                'updateUserList',
-                JSON.stringify(
-                    await GET_ROOM_USERS({
-                        room: {
-                            _id: new mongoose.Types.ObjectId(currentRoomId)
-                        }
-                    })
-
-                )
-            );
-
-            socket.broadcast.emit(
-                'updateRooms',
-                JSON.stringify({
-                    room: await GET_ROOMS()
+                const updateUserList =  await GET_ROOM_USERS({
+                    room: {_id: currentRoomId}
                 })
-            );
+                socket.broadcast.to(currentRoomId).emit('updateUserList', JSON.stringify(updateUserList));
 
-            socket.broadcast.to(currentRoomId).emit(
-                'receivedNewMessage',
-                JSON.stringify(
-                    await ADD_MESSAGE({
+                const rooms = await GET_ROOMS()
+                socket.broadcast.emit('updateRooms', JSON.stringify({room: rooms}));
+
+                // const receivedNewMessage = await ADD_MESSAGE({
+                //     room: { _id: roomState.previous._id },
+                //     user: null,
+                //     content: CREATE_MESSAGE_CONTENT(roomState, socket.id),
+                //     admin: true
+                // })
+
+                socket.broadcast.to(currentRoomId).emit('receivedNewMessage',
+                    JSON.stringify(
+                        await ADD_MESSAGE({
                         room: { _id: roomState.previous._id },
                         user: null,
                         content: CREATE_MESSAGE_CONTENT(roomState, socket.id),
                         admin: true
                     })
-                )
-            );
+                ));
+            }
+        }catch (err) {
+            console.log("Err Disconnected", err)
         }
+
     });
 
     /** Join User in Room */
-    socket.on('userJoined', data => {
+    socket.on('userJoined', (data) => {
         currentRoomId = data.room._id;
         data.socketId = socket.id;
+        socket.join(data)
         JOIN_ROOM(socket, data);
     });
 
@@ -174,17 +174,20 @@ io.on('connection', socket => {
             }
         }
 
-        socket.broadcast
-            .to(data.room._id)
-            .emit('receivedUserTyping', JSON.stringify(userTypings[data.room._id]));
+        socket.broadcast.to(data.room._id).emit('receivedUserTyping', JSON.stringify(userTypings[data.room._id]));
     });
 
     /** New Message Event */
     socket.on('newMessage', async data => {
-        const newMessage = await ADD_MESSAGE(data);
+        try {
+            const newMessage = await ADD_MESSAGE(data);
+            // Emit data back to the client for display
+            console.log("New Message Io", newMessage)
+            socket.broadcast.to(data.room._id).emit('receivedNewMessage', JSON.stringify(newMessage));
+        }catch (err) {
+            console.log("New Mess", err)
+        }
 
-        // Emit data back to the client for display
-        io.to(data.room._id).emit('receivedNewMessage', JSON.stringify(newMessage));
     });
 
     /** Room Deleted Event */
@@ -209,12 +212,25 @@ io.on('connection', socket => {
     socket.on('reconnectUser', data => {
         currentRoomId = data.room._id;
         data.socketId = socket.id;
-        if (socket.request.headers.referer.split('/').includes('room')) {
-            socket.join(currentRoomId, async () => {
+        if (socket.handshake.headers.referer.split('/').includes('room')) {
+            try {
+                socket.join(currentRoomId);
                 socket.emit('reconnected');
-                await UPDATE_ROOM_USERS(data);
-            });
+                UPDATE_ROOM_USERS(data);
+            } catch (error) {
+                console.error('Error while rejoining room:', error);
+            }
         }
+    //     currentRoomId = data.room._id;
+    //     data.socketId = socket.id;
+    //     const refer = socket.handshake.headers.referer.split('/').includes('room')
+    //     console.log("Refer", refer)
+    //     if (refer) {
+    //         socket.join(currentRoomId, async () => {
+    //             socket.emit('reconnected');
+    //             await UPDATE_ROOM_USERS(data);
+    //         });
+    //     }
     });
 });
 

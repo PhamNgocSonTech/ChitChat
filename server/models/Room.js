@@ -20,7 +20,7 @@ const RoomSchema = new Schema(
 
         password: {
             type: String,
-            default: '',
+            default: ''
         },
 
         access: {

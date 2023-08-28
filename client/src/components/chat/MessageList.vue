@@ -211,8 +211,8 @@ export default {
       }
     }
 
-    console.log("Messages Ref", messagesRef.value)
-    console.log("Messages", messagesProps.value)
+    console.log("MessagesRef: ", messagesRef.value)
+    console.log("messagesProps: ", messagesProps.value)
     onMounted(() => {
       scrollMessages();
     })

@@ -5,14 +5,13 @@ import Store from './store/store'
 import setAuthToken from "@/utils/authToken";
 import axios from "axios";
 import router from "./router/router";
-// import {io} from 'socket.io-client';
+import io from 'socket.io-client';
 import moment from "moment";
-const io = require("socket.io-client");
+// const io = require("socket.io-client");
 
 let socket = null
-socket = io("http://localhost:5000", {
-    withCredentials: true,
-});
+socket = io("http://localhost:5000")
+console.log("Socket Assign", socket)
 Store.dispatch('assignSocket', socket)
 console.log(socket)
 

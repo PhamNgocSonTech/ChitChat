@@ -16,30 +16,31 @@ module.exports = {
         })
     },
 
-    GET_MESSAGES: async data => {
-        return Message.find({room: data.room._id}).populate('user', [
-            'username',
-            'social',
-            'handle',
-            'image'
-        ]);
+    GET_MESSAGES: data => {
+        return Message.find({room: data.room._id})
+            .populate('user', ['username', 'social', 'handle', 'image'])
     },
 
     CREATE_MESSAGE_CONTENT: (room, socketId) => {
+        // console.log('Debug: socketId:', socketId);
+        // console.log('Debug: room.previous.users:', room.previous.users);
         const user = room.previous.users.find(user => user.socketId === socketId);
+        // console.log('user:', user);  // In ra thông tin của user
+        // console.log('user.lookup.handle:', user && user.lookup.handle);  // In ra giá trị của user.lookup.handle
+        // console.log('room.updated.name:', room.updated.name);  // In ra giá trị của room.updated.name
         return user && user.lookup.handle
             ? `${user.lookup.handle} has left ${room.updated.name}`
             : `Unknown User has left ${room.updated.name}`
     },
 
-    GET_ROOMS: async () => {
-        return Room.find({})
-            .populate('user users.lookup', ['username', 'social', 'handle', 'image'])
-            .select('-password')
+    GET_ROOMS: () => {
+            return  Room.find({})
+                .populate('user users.lookup', ['username', 'social', 'handle', 'image'])
+                .select('-password')
     },
 
     GET_ROOM_USERS: async data => {
-        return Room.findById(data.room._id)
+        return await Room.findById(data.room._id)
             .populate('user users.lookup', ['username', 'social', 'handle', 'image'])
             .select('-password');
     },
@@ -51,10 +52,11 @@ module.exports = {
         if(room) {
             if(room.users && !room.users.find(user => user.lookup._id.toString() === data.user._id)
             ) {
-                room.users.push({
-                    lookup: mongoose.Types.ObjectId(data.user._id),
+                const usersData = {
+                    lookup: new mongoose.Types.ObjectId(data.user._id),
                     socketId: data.socketId,
-                })
+                }
+                room.users.push(usersData)
                 const updatedRoom = await room.save();
                 return await Room.populate(updatedRoom, {
                     path: 'user users.lookup',
@@ -79,7 +81,7 @@ module.exports = {
     },
 
     FILTER_ROOM_USERS: async data => {
-        const room = await Room.findById(new mongoose.Types.ObjectId(data.roomId))
+        const room = await Room.findById(data.roomId)
             .select('-password')
             .populate('users.lookup', ['username', 'social','handle', 'image'])
         if(room) {
