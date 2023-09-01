@@ -83,7 +83,7 @@
             </ul>
           </transition>
           <!-- Private Room Enter Modal -->
-          <Modal name="private-room" ref="privateRoom">
+          <Modal name="private-room" ref="privateRoomRef">
             <template v-slot:header>
               <h2
                   class="text-upper"

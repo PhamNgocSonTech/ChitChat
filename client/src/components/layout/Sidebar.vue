@@ -22,7 +22,7 @@ import {ref, onMounted} from "vue";
 export default {
   name: 'Sidebar',
   setup() {
-    const visible = ref(window.innerWidth >= 768);
+    const visible = ref(window.innerWidth < 768 ? false : true);
 
     const toggle = () => {
       visible.value = !visible.value
@@ -31,7 +31,7 @@ export default {
     // const shouldShowSidebar = computed(() => window.innerWidth >= 768 || visible.value);
 
     const handleResize = () => {
-      visible.value = window.innerWidth >= 768
+      visible.value = window.innerWidth < 768 ? false : true
     };
 
     onMounted(() => {

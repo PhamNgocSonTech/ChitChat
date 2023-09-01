@@ -2,20 +2,21 @@
   <div id="app" class="app">
     <Navbar/>
     <Particle name="particle-js"/>
+    <router-view/>
     <transition
       :name="transitionName"
       :enter-active-class="enterActive"
       :leave-active-class="leaveActive"
       mode="out-in"
     >
-      <router-view/>
+
     </transition>
     <Footer v-if="['Home', 'Login', 'Register', 'About'].includes($route.name)"/>
   </div>
 </template>
 
 <script>
-import {ref, onMounted} from "vue";
+import {ref} from "vue";
 import _ from "lodash";
 import Navbar from "@/components/layout/Navbar.vue";
 import Footer from "@/components/layout/Footer.vue";
@@ -27,7 +28,7 @@ const DEFAULT_LEAVE_ACTIVE_CLASS = 'animated fadeOut';
 export default {
   name: 'App',
   components: {
-    Navbar,
+    Navbar: Navbar,
     Footer,
     Particle
   },
@@ -42,7 +43,7 @@ export default {
       leaveActive.value = DEFAULT_LEAVE_ACTIVE_CLASS;
     };
 
-    onMounted(() => {
+    // onMounted(() => {
       const router = useRouter();
       router.beforeEach((to, from, next) => {
         if (!_.isEmpty(to.meta)) {
@@ -64,7 +65,7 @@ export default {
         }
         next();
       });
-    })
+    // })
     return {
       transitionName,
       enterActive,

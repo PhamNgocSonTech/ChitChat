@@ -15,7 +15,7 @@
     "particles.js": "^2.0.0",
     "sass": "^1.65.1",
     "slugify": "^1.6.6",
-    "socket.io-client": "^4.7.2",
+    "socket.io-client": "^2.2.0",
     "typed.js": "^2.0.16",
     "vue": "^3.2.13",
     "vue-router": "^4.2.4",

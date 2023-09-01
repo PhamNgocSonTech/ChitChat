@@ -97,129 +97,46 @@
   </div>
 </template>
 
-<!--<template>-->
-<!--  <div class="chat__c-messagelist">-->
-<!--    <ul class="chat__messages" ref="messagesProps" v-if="messagesProps" >-->
-<!--      <transition-group name="slideDown">-->
-<!--        <li class="chat__message" v-for="message in messagesProps" :key="message._id">-->
-<!--          &lt;!&ndash; Message belongs to the user &ndash;&gt;-->
-<!--          <div-->
-<!--              class="chat__message-item u-flex-right"-->
-<!--              v-if="!message.admin && message.user && message.user._id === user._id"-->
-<!--          >-->
-<!--            <div class="chat__message-body">-->
-<!--              <div class="chat__message-content chat__message-content&#45;&#45;right">-->
-<!--                <span> {{ message.content }} </span>-->
-<!--              </div>-->
-<!--              <div class="chat__message-details">-->
-<!--                <span> {{ message.user.handle }} </span>-->
-<!--                <span> {{ moment(message.created_at).fromNow() }} </span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--            <img-->
-<!--                v-if="!message.user.social.id"-->
-<!--                :src="message.user.image"-->
-<!--                class="chat__user-avatar"-->
-<!--                alt-->
-<!--            >-->
-<!--            <img v-else :src="message.user.social.image" class="chat__user-avatar" alt>-->
-<!--          </div>-->
-<!--          &lt;!&ndash; Message belongs to the admin &ndash;&gt;-->
-<!--          <div class="chat__message-item u-flex-center" v-else-if="message.admin">-->
-<!--            <img-->
-<!--                src="../../assets/img/icons8-businessman.svg"-->
-<!--                class="chat__user-avatar"-->
-<!--                alt-->
-<!--            >-->
-<!--            <div class="chat__message-body">-->
-<!--              <div class="chat__message-content">-->
-<!--                <span> {{ message.content }} </span>-->
-<!--              </div>-->
-<!--              <div class="chat__message-details">-->
-<!--                <span>Admin</span>-->
-<!--                <span> {{ moment(message.created_at).fromNow() }} </span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; Message has been deleted &ndash;&gt;-->
-<!--          <div class="chat__message-item" v-else-if="!message.user">-->
-<!--            <img src="@/assets/img/icons8-account-64.png" class="chat__user-avatar" alt>-->
-
-<!--            <div class="chat__message-body">-->
-<!--              <div class="chat__message-content chat__message-content&#45;&#45;left">-->
-<!--                <span> {{ message.content }} </span>-->
-<!--              </div>-->
-<!--              <div class="chat__message-details">-->
-<!--                <span>Unknown User</span>-->
-<!--                <span> {{ moment(message.created_at).fromNow() }} </span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          &lt;!&ndash; Message belongs to another user &ndash;&gt;-->
-<!--          <div class="chat__message-item" v-else>-->
-<!--            <img-->
-<!--                v-if="!message.user.social.id"-->
-<!--                :src="message.user.image"-->
-<!--                class="chat__user-avatar"-->
-<!--                alt-->
-<!--            >-->
-<!--            <img v-else :src="message.user.social.image" class="chat__user-avatar" alt>-->
-<!--            <div class="chat__message-body">-->
-<!--              <div class="chat__message-content chat__message-content&#45;&#45;left">-->
-<!--                <span> {{ message.content }} </span>-->
-<!--              </div>-->
-<!--              <div class="chat__message-details">-->
-<!--                <span> {{ message.user.handle }} </span>-->
-<!--                <span> {{ moment(message.created_at).fromNow() }} </span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </li>-->
-<!--      </transition-group>-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--</template>-->
-
 <script>
-import {ref, computed, onMounted, onUpdated, inject} from "vue";
+import {computed, inject, onMounted, onUpdated, ref} from "vue";
 import {useStore} from "vuex";
 
 export default {
   name: 'MessageList',
-  props: {
-    messages: Array
-  },
+  props: ['messages'],
+  // props: {
+  //   messages: Array
+  // },
   setup(props) {
     const store = useStore();
     const moment = inject('moment')
     const messagesRef = ref(null)
     const user = ref(null)
-    const getUser = computed(() => store.getters.getUserData)
-    const messagesProps = ref(props.messages);
-    // const messagesProps = computed(() => {
-    //   return props.messages
-    // })
-    // messagesRef.value = messagesProps.value
+    const getUser = computed(() =>  store.getters.getUserData)
+    // const messagesProps = ref(props.messages);
+    const messagesProps = computed(() => {
+      return props.messages
+    })
       user.value = getUser.value
 
 
     const scrollMessages = () => {
-      if(messagesRef.value){
-        messagesRef.value.scrollTop = messagesRef.value.scrollHeight
+      let container = messagesRef.value
+      if(container) {
+        container.scrollTop = container.scrollHeight;
+        console.log("scroll top", container.scrollTop)
       }
     }
-
-    console.log("MessagesRef: ", messagesRef.value)
-    console.log("messagesProps: ", messagesProps.value)
     onMounted(() => {
       scrollMessages();
+      console.log("messagesRefValue", messagesRef.value)
+
     })
 
     onUpdated(() => {
       scrollMessages();
     })
+
     return {
       messagesProps,
       messagesRef,
@@ -233,5 +150,11 @@ export default {
 
 
 <style lang="scss" scoped>
+  //.chat__messages {
+  //  display: flex;
+  //  flex-direction: column-reverse;
+  //  //height: 100px;
+  //  //overflow-y: scroll;
+  //}
 
 </style>

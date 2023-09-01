@@ -4,7 +4,7 @@
             class="chat__input-control"
             placeholder="Type a Message"
             v-model.trim="content"
-            v-on:keyup="triggerMessageSend($event)"
+            v-on:keyup="triggerMessageSend"
             data-gramm_editor="false"
         ></textarea>
     <button class="btn btn--clear btn--info m-0 u-border-rad-0" @click.prevent="sendMessage">Send</button>
@@ -21,7 +21,7 @@ export default {
     const store = useStore()
 
     const content = ref('')
-    const getUser = computed(() =>  store.getters.getUserData)
+    const getUser = computed(() => store.getters.getUserData)
     const getRoom = computed(() => store.getters.getCurrentRoom)
     const getSocket = computed(() => store.getters.getSocketData)
 

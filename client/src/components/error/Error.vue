@@ -5,44 +5,45 @@
       leave-active-class="animated fadeOut"
       mode="out-in"
   >
-    <div v-if="errors" v-show="errors.length !== 0" class="form__error">
+    <div v-if="errorsProps" v-show="errorsProps.length !== 0" class="form__error">
       <transition-group
           name="fade"
           enter-active-class="animated fadeIn"
           leave-active-class="animated fadeOut"
           mode="out-in"
       >
-        <span v-for="error in errors" :key="error.key" > {{error.value}} </span>
+        <span v-for="error in errors" :key="error.key" > {{errorsProps.value}} </span>
       </transition-group>
     </div>
-    <div v-else v-show="errorMessage" class="mb-6 form__error">
+    <div v-else v-show="errorsProps" class="mb-6 form__error">
       <transition
           name="fade"
           enter-active-class="animated fadeIn"
           leave-active-class="animated fadeOut"
           mode="out-in"
       >
-        <span> {{errorMessage}} </span>
+        <span> {{errorMessageProps}} </span>
       </transition>
     </div>
   </transition>
 </template>
 
 <script>
-import {ref} from "vue";
+import {computed} from "vue";
 
 export default {
     name: 'Error',
-    props: {
-      errorsProps: [],
-      message: String,
-    },
+    props: ['errors', 'message'],
     setup(props) {
-      const errors = ref(props.errorsProps)
-      const errorMessage = ref(props.message)
+      const errorsProps = computed(() => {
+         return props.errors
+      })
+      const errorMessageProps = computed(() => {
+        return props.message
+      })
       return {
-        errors,
-        errorMessage
+        errorsProps,
+        errorMessageProps
       }
     }
   }

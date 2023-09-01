@@ -12,7 +12,7 @@
     </li>
     <li class="nav__item">
       <button
-          @click.prevent="logout"
+          @click.prevent="logoutProps"
           class="nav__link nav__link--btn nav__link--rounded"
       >Logout</button>
     </li>
@@ -27,21 +27,24 @@ import {useStore} from "vuex";
 
 export default {
     name: 'SingedInLinks',
-    props: {
-      user: Object,
-      logout: Function
-    },
+    props: ['logout', 'user'],
+    // props: {
+    //   user: Object,
+    //   logoutProps: Function
+    // },
     setup(props) {
       const store = useStore();
       const userProps = ref(props.user)
       const getUser = computed(() => store.getters.getUserData)
       const isAuth = computed(() => store.getters.isAuthorized)
-      // const logoutProps = ref(props.logout);
+      const logoutProps = ref(props.logout);
       // const userProps = ref(props.user);
       return {
         userProps,
+        logoutProps,
         getUser,
         isAuth
+
       }
     }
   }

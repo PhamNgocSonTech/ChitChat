@@ -195,11 +195,12 @@ export default {
           return ''
         })
 
-        const checkUserTabs = (room) => {
-          if(room && room.users.value.findIndex((user) => user.lookup._id === getUser.value._id) === -1){
-            router.push({
-              name: 'RoomList'
-            })
+       function checkUserTabs(room) {
+          if (
+              room &&
+              room.users.findIndex((user) => user.lookup._id === getUser.value._id) === -1
+          ) {
+            route.push({ name: 'RoomList' });
           }
         }
         const sortAlphabetical = (a, b) => {
@@ -391,7 +392,7 @@ export default {
           getSocket.value.removeListener('userJoined')
         })
         onMounted(() => {
-          console.log('get socket user value', users.value)
+          console.log('Mess Props In Room',messages)
         })
         return {
           room,

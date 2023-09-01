@@ -23,8 +23,7 @@ const MessageSchema = new Schema({
 },
     {
         timestamps: {
-            createdAt: 'createAt',
-            updatedAt: 'updatedAt'
+            createdAt: 'created_at',
         }
     }
 )

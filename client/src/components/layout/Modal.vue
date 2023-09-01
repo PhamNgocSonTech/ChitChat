@@ -30,14 +30,14 @@ import {computed, ref} from 'vue';
 
 export default {
   name: 'Modal',
-  props: {
-    name: String
-  },
+  props: ['name'],
   setup(props) {
     const visible = ref(false);
-    const nameProps = ref(props.name)
+    const nameProps = computed(() => {return props.name})
     // const modalData = ref({})
-    const modalData = computed(() => visible.value)
+    const modalData = computed(() => {
+      return visible.value
+    })
     const close = () => {
       visible.value = false;
     };
@@ -46,7 +46,7 @@ export default {
       visible.value = true;
     };
 
-    const setData = (key, value) => {
+    function setData(key, value){
       visible.value[key] = value
     }
     return {

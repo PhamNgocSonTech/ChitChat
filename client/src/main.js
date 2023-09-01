@@ -9,11 +9,9 @@ import io from 'socket.io-client';
 import moment from "moment";
 // const io = require("socket.io-client");
 
-let socket = null
-socket = io("http://localhost:5000")
-console.log("Socket Assign", socket)
+// let socket = null
+const socket = io("http://localhost:5000")
 Store.dispatch('assignSocket', socket)
-console.log(socket)
 
 /** Check for auth token on refresh and set authorization header for incoming requests */
 if (localStorage.authToken) {

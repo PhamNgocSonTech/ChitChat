@@ -27,7 +27,7 @@
     "passport-google-oauth": "^2.0.0",
     "passport-jwt": "^4.0.1",
     "slugify": "^1.6.6",
-    "socket.io": "^4.7.2",
+    "socket.io": "^2.2.0",
     "vue": "^3.3.4",
     "vue-server-renderer": "^2.7.14"
   },
