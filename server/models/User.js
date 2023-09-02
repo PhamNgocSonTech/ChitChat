@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-
-
 const Schema = mongoose.Schema;
+
 const UserSchema = new Schema(
     {
         handle: {
@@ -13,7 +12,7 @@ const UserSchema = new Schema(
         },
         username: {
             type: String,
-            required: true,
+            trim: true,
             unique: true,
             maxLength: ['10', 'Username should be less than 10 characters']
         },

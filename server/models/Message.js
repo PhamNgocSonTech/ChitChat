@@ -20,14 +20,12 @@ const MessageSchema = new Schema({
         type: Boolean,
         default: false
     }
-
 },
     {
         timestamps: {
-            createdAt: 'createAt',
-            updatedAt: 'updatedAt'
+            createdAt: 'created_at',
         }
     }
 )
-const Message = mongoose.model('MessageSchema', MessageSchema);
+const Message = mongoose.model('Message', MessageSchema);
 module.exports = {Message}

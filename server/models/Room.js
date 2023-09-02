@@ -1,26 +1,26 @@
 const mongoose = require('mongoose');
-const bcryptjs = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 
 const RoomSchema = new Schema(
     {
         name: {
             type: String,
-            trim: true,
             required: true,
+            trim: true,
             unique: true,
             minLength: ['3', 'Room name should be greater than 3 characters'],
-            maxLength: ['10', 'Room name should be less than 10 characters'],
+            maxLength: ['20', 'Room name should be less than 20 characters'],
         },
         user: {
             type: Schema.Types.ObjectId,
             ref: 'User',
-            default: ''
+            default: null,
         },
 
         password: {
             type: String,
-            default: '',
+            default: ''
         },
 
         access: {
@@ -41,7 +41,7 @@ const RoomSchema = new Schema(
                     required: true,
                     ref: 'User',
                 },
-                sockedId: {
+                socketId: {
                     type: String,
                     required: true
                 }
@@ -64,7 +64,7 @@ RoomSchema.methods.isValidPassword = function(password) {
 RoomSchema.pre('save', function (next) {
     if(this.password !== '' && this.isModified('password')) {
         bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(this.password, (err, res) => {
+            bcrypt.hash(this.password, salt, (err, res) => {
                 this.password = res
                 next();
             })
@@ -74,5 +74,5 @@ RoomSchema.pre('save', function (next) {
     }
 })
 
-const Room = mongoose.model('RoomSchema', RoomSchema);
+const Room = mongoose.model('Room', RoomSchema);
 module.exports = {Room}

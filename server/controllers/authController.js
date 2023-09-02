@@ -17,7 +17,6 @@ const registerUser =  (req, res) => {
             errorsArr.push({param: 'email', msg: 'Email is already taken'});
             if(user.username === req.body.username) {
                 errorsArr.push({param: 'username', msg: 'Username is already taken'});
-
             }
             res.send({
                 errors: createErrorObject(errorsArr)
@@ -37,7 +36,7 @@ const registerUser =  (req, res) => {
             })
             newUser.save().then(userData => {
                 const user = _.omit(userData.toObject(), ['password']);
-                const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '5m'});
+                const token = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: '15m'});
                 res.status(200).send({
                     auth: true,
                     token: `Bearer ${token}`,
@@ -60,7 +59,7 @@ const loginUser = async (req, res) => {
             error: 'No User Not Found'
          });
     }
-    const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, {expiresIn: '5m'});
+    const token = jwt.sign(user.toObject(), process.env.JWT_SECRET, {expiresIn: '15m'});
 
     res.status(200).send({auth: true, token: `Bearer ${token}`, user});
 }
