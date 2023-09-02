@@ -35,13 +35,7 @@ const io = require('socket.io')(httpServer);
 //     }
 // });
 
-// Cors Config
-app.use(
-    cors({
-        origin: true,
-        credentials: true,
-    })
-);
+
 
 const {
     ADD_MESSAGE,
@@ -62,12 +56,19 @@ const roomRoutes = require('./routes/room')
 
 // EXPRESS APP
 app.use(morgan('dev'));
-app.use(cors());
 app.use(compression());
 app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(passport.initialize());
+// Cors Config
+app.use(
+    cors({
+        origin: 'https://chit-chat-bay.vercel.app',
+        credentials: true,
+    })
+);
+
 app.set('io', io);
 
 // ROUTES DEFINE
