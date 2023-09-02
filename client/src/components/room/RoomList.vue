@@ -312,8 +312,9 @@ export default {
           enterRoom(room);
         } else {
           privateRoomName.value = room.name;
-          privateRoomRef.value.modalData.room = room; // Gán dữ liệu vào modalData
-          // privateRoomRef.value.modalData.setData('room', room);
+          // privateRoomRef.value.modalData.room = room; // Gán dữ liệu vào modalData
+          privateRoomRef.value.modalData.setData('room', room);
+
           privateRoomRef.value.open();
         }
       }
@@ -369,9 +370,9 @@ export default {
 
       onMounted(() => {
           fetchRoomData();
-          console.log('Room Users Length', rooms.value.users)
-          console.log('Private Room Ref Set Data', privateRoomRef.value)
-          if(errorMessage.value) {
+          console.log("room ref ", privateRoomRef.value)
+
+        if(errorMessage.value) {
             setTimeout(() => {
               errorMessage.value = ''
             }, 1500)

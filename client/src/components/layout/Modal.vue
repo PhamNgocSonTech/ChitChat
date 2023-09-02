@@ -33,7 +33,7 @@ export default {
   props: ['name'],
   setup(props) {
     const visible = ref(false);
-    const nameProps = computed(() => {return props.name})
+    const nameProps = ref(props.name)
     // const modalData = ref({})
     const modalData = computed(() => {
       return visible.value
@@ -46,8 +46,8 @@ export default {
       visible.value = true;
     };
 
-    function setData(key, value){
-      visible.value[key] = value
+    const setData = (key, value) => {
+      visible[key] = value
     }
     return {
       visible,
