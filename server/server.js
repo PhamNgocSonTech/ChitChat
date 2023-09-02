@@ -35,6 +35,14 @@ const io = require('socket.io')(httpServer);
 //     }
 // });
 
+// Cors Config
+app.use(
+    cors({
+        origin: true,
+        credentials: true,
+    })
+);
+
 const {
     ADD_MESSAGE,
     CREATE_MESSAGE_CONTENT,

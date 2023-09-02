@@ -82,6 +82,10 @@ import router from "@/router/router";
       const errorMessage = ref(props.message);
       const errors = ref([])
       // const saveUserData = computed(() => store.dispatch('saveUserData'))
+      // const headers = {
+      //   'Content-Type': 'application/json', // Xác định định dạng của dữ liệu bạn gửi
+      //   'Accept': 'application/json, text/plain, */*' // Cho biết định dạng bạn mong muốn nhận từ máy chủ
+      // };
       const handleSubmit = () => {
         errors.value = [];
         if(email.value && password.value) {
