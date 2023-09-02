@@ -10,6 +10,7 @@ import moment from "moment";
 // const io = require("socket.io-client");
 
 // let socket = null
+
 // const socket = io("http://localhost:5000")
 const socket = io("https://chitchat-sx7y.onrender.com")
 Store.dispatch('assignSocket', socket)

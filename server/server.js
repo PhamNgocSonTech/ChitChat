@@ -17,6 +17,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
+const port = process.env.PORT || 5000
+const path = require("path");
+
 // const enforce = require("express-sslify")
 
 // SOCKET IO
@@ -28,7 +31,7 @@ const io = require('socket.io')(httpServer);
 //         origin: "http://localhost:8080",
 //         methods: ["GET", "POST"],
 //         // methods: ["PUT", "GET", "POST", "DELETE", "OPTIONS"],
-//         // credentials: true
+//         credentials: true
 //     }
 // });
 
@@ -218,7 +221,12 @@ io.on('connection', socket => {
     });
 });
 
-httpServer.listen(process.env.PORT || 5000, () => {
+app.use(express.static(path.join(__dirname, '../client', 'dist')));
+app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, "dist", "index.html"));
+});
+
+httpServer.listen(port, () => {
     console.log("Server is running on port", `${process.env.PORT} 🍬`)
 
 })
