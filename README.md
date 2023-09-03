@@ -42,7 +42,10 @@ List the ready features here:
 
 
 ## :camera:Screenshots
-![Homepage screenshot](./screenshots/screenshots-readme.png)
+![Homepage screenshot](./screenshots/home.png)
+![Profile screenshot](./screenshots/profile.png)
+![Roomlist screenshot](./screenshots/room-list.png)
+![Chat screenshot](./screenshots/chat.png)
 
 
 ## :wrench:Setup
