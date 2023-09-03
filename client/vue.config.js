@@ -25,11 +25,13 @@ module.exports = defineConfig({
   },
   devServer: {
     proxy: {
-      '/api': {
+      '^/api': {
         // target: 'http://localhost:5000',
         target: 'https://chitchat-sx7y.onrender.com',
         changeOrigin: true
       }
+      // target: 'https://chitchat-sx7y.onrender.com',
+
     }
   }
 })

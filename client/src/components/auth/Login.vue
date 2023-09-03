@@ -82,17 +82,18 @@ import router from "@/router/router";
       const errorMessage = ref(props.message);
       const errors = ref([])
       // const saveUserData = computed(() => store.dispatch('saveUserData'))
-      // const headers = {
-      //   'Content-Type': 'application/json', // Xác định định dạng của dữ liệu bạn gửi
-      //   'Accept': 'application/json, text/plain, */*' // Cho biết định dạng bạn mong muốn nhận từ máy chủ
-      // };
+      const headers = {
+        'Content-Type': 'application/json', // Xác định định dạng của dữ liệu bạn gửi
+        // 'Accept': 'application/json, text/plain, */*' // Cho biết định dạng bạn mong muốn nhận từ máy chủ
+      };
+      // const urlApi = 'https://chitchat-sx7y.onrender.com'
       const handleSubmit = () => {
         errors.value = [];
         if(email.value && password.value) {
           axios.post('/api/auth/login', {
             email: email.value,
             password: password.value
-          }).then(res => {
+          }, {headers: headers}).then(res => {
             if(res.data.errors) {
               for(const error of res.data.errors){
                 const [key] = Object.keys(error);

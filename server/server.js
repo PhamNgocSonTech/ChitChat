@@ -62,12 +62,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 // Cors Config
-app.use(
-    cors({
-        origin: 'https://chit-chat-bay.vercel.app',
-        credentials: true,
-    })
-);
+app.use(cors());
 
 app.set('io', io);
 
