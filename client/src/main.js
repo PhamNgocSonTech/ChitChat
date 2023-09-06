@@ -9,10 +9,15 @@ import io from 'socket.io-client';
 import moment from "moment";
 // const io = require("socket.io-client");
 
-// let socket = null
+let socket = null
 
 // const socket = io("http://localhost:5000")
-const socket = io("https://chitchat-sx7y.onrender.com")
+// const socket = io("https://chitchat-sx7y.onrender.com")
+if (process.env.NODE_ENV === 'development') {
+    socket = io('http://localhost:5000');
+} else {
+    socket = io('https://chitchat-sx7y.onrender.com');
+}
 Store.dispatch('assignSocket', socket)
 
 /** Check for auth token on refresh and set authorization header for incoming requests */

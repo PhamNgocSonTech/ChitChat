@@ -12,13 +12,20 @@ require('./config/passport')(passport);
 // INIT EXPRESS
 const express = require('express');
 
+// LOGGING
 const morgan = require('morgan');
+const winston = require('winston')
+const {logger} = require('./config/logModule')
+
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
 const port = process.env.PORT || 5000
+
+// Built In Node Dependencies
 const path = require("path");
+const fs = require('fs')
 
 // const enforce = require("express-sslify")
 
@@ -34,8 +41,6 @@ const io = require('socket.io')(httpServer);
 //         credentials: true
 //     }
 // });
-
-
 
 const {
     ADD_MESSAGE,
@@ -55,7 +60,6 @@ const messageRoutes = require('./routes/message')
 const roomRoutes = require('./routes/room')
 
 // EXPRESS APP
-app.use(morgan('dev'));
 app.use(compression());
 app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -63,8 +67,15 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 // Cors Config
 app.use(cors());
-
 app.set('io', io);
+
+// Write Log
+app.use(morgan('combined', {
+        stream: fs.createWriteStream('logs/access.log', {flags: 'a'})
+    })
+)
+app.use(morgan('dev'));
+
 
 // ROUTES DEFINE
 app.use('/api/auth', authRoutes)
@@ -72,6 +83,14 @@ app.use('/api/user', userRoutes)
 app.use('/api/profile', profileRoutes)
 app.use('/api/messages', messageRoutes)
 app.use('/api/room', roomRoutes)
+
+if(process.env.NODE_ENV !== 'production') {
+    logger.add(
+        new winston.transports.Console({
+            format: winston.format.simple()
+        })
+    )
+}
 
 
 let userTypings = {};
@@ -82,7 +101,7 @@ io.on('connection', socket => {
 
     /** Socket Events */
     socket.on('disconnect', async () => {
-
+        logger.info("User Disconnected")
         if (currentRoomId) {
             /** Filter through users and remove user from user list in that room */
             const roomState = await FILTER_ROOM_USERS({
@@ -230,7 +249,11 @@ app.get("/*", (req, res) => {
     res.sendFile(path.resolve(__dirname, '../client', 'dist', 'index.html'));
 });
 
-httpServer.listen(port, () => {
-    console.log("Server is running on port", `${port} 🍬`)
-})
+if (process.env.NODE_ENV !== 'test') {
+    httpServer.listen(port, () => {
+        // console.log("Server is running on port", `${port} 🍬`)
+        logger.info(`[LOG=SERVER] Server is running on port", ${port}🍬`)
+    })
+}
+
 module.exports = {app}
