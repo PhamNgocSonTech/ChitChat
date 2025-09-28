@@ -73,6 +73,11 @@ app.use('/api/profile', profileRoutes)
 app.use('/api/messages', messageRoutes)
 app.use('/api/room', roomRoutes)
 
+// ROUTE HEALTH CHECK ENDPOINT
+app.get('/health', (req, res) => {
+    res.status(200).json({status: 'OK', message: 'API is healthy'})
+})
+
 
 let userTypings = {};
 
