@@ -35,6 +35,8 @@ const io = require('socket.io')(httpServer);
 //     }
 // });
 
+
+
 const {
     ADD_MESSAGE,
     CREATE_MESSAGE_CONTENT,
@@ -54,12 +56,14 @@ const roomRoutes = require('./routes/room')
 
 // EXPRESS APP
 app.use(morgan('dev'));
-app.use(cors());
 app.use(compression());
 app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(passport.initialize());
+// Cors Config
+app.use(cors());
+
 app.set('io', io);
 
 // ROUTES DEFINE

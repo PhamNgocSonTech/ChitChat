@@ -65,27 +65,27 @@
                             >Mongo Atlas</a> is used for storing and querying data
                         </span>
           </div>
-          <div class="features__item">
-                        <span>
-                            Server logging is done with
-                            <a
-                                href="https://www.npmjs.com/package/winston"
-                                class="btn btn--info"
-                            >Winston</a> and
-                            <a
-                                href="https://www.npmjs.com/package/morgan"
-                                class="btn btn--coral"
-                            >Morgan</a>
-                        </span>
-          </div>
-          <div class="features__item">
-                        <span>
-                            <a
-                                href="https://www.npmjs.com/package/concurrently"
-                                class="btn btn--danger"
-                            >Concurrently</a> is used to run both the server and client at the same time
-                        </span>
-          </div>
+<!--          <div class="features__item">-->
+<!--                        <span>-->
+<!--                            Server logging is done with-->
+<!--                            <a-->
+<!--                                href="https://www.npmjs.com/package/winston"-->
+<!--                                class="btn btn&#45;&#45;info"-->
+<!--                            >Winston</a> and-->
+<!--                            <a-->
+<!--                                href="https://www.npmjs.com/package/morgan"-->
+<!--                                class="btn btn&#45;&#45;coral"-->
+<!--                            >Morgan</a>-->
+<!--                        </span>-->
+<!--          </div>-->
+<!--          <div class="features__item">-->
+<!--                        <span>-->
+<!--                            <a-->
+<!--                                href="https://www.npmjs.com/package/concurrently"-->
+<!--                                class="btn btn&#45;&#45;danger"-->
+<!--                            >Concurrently</a> is used to run both the server and client at the same time-->
+<!--                        </span>-->
+<!--          </div>-->
           <div class="features__item">
                         <span>
                             <a href="https://vuejs.org/" class="btn btn--success">Vue JS</a> is used as the frontend framework
@@ -93,12 +93,16 @@
           </div>
           <div class="features__item">
                         <span>
-                            <a href="https://travis-ci.org/" class="btn btn--info">Travis CI</a> is incorporated for continuous integration
+<!--                            <a href="https://travis-ci.org/" class="btn btn&#45;&#45;info">Travis CI</a> is incorporated for continuous integration-->
                         </span>
           </div>
           <div class="features__item">
                         <span>
-                            <a href="https://www.heroku.com/" class="btn btn--purple">Heroku</a> is used for production deployment
+                            <a href="https://vercel.com/" class="btn btn--info">Vercel</a> and
+                            <a
+                                href="https://render.com/"
+                                class="btn btn--coral"
+                            >Render</a> is used for backend production deployment
                         </span>
           </div>
         </div>

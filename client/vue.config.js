@@ -31,6 +31,8 @@ module.exports = defineConfig({
         // target: 'https://chitchat-5o6k.onrender.com',
         changeOrigin: true
       }
+      // target: 'https://chitchat-sx7y.onrender.com',
+
     }
   }
 })
