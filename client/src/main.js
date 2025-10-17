@@ -11,8 +11,22 @@ import moment from "moment";
 
 // let socket = null
 
+let API_URL = ''
+
+try {
+    const configResponse = await fetch('/config')
+    const config = await configResponse.json()
+    API_URL = config.apiUrl
+    console.log(`🌐 Connected to backend: ${API_URL}`)
+} catch (err) {
+    console.warn('⚠️ Không lấy được /config, fallback localhost')
+    API_URL = 'http://localhost:5000'
+}
+
 // const socket = io("http://localhost:5000")
-const socket = io("https://chitchat-5o6k.onrender.com")
+// const socket = io("https://chitchat-5o6k.onrender.com")
+const socket = io(API_URL)
+
 Store.dispatch('assignSocket', socket)
 
 /** Check for auth token on refresh and set authorization header for incoming requests */

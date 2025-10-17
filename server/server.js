@@ -75,6 +75,14 @@ app.get('/health', (req, res) => {
 })
 
 
+// DYNAMIC ENDPOINT FOR FRONTEND
+app.get('/config', (req, res) => {
+    res.json({
+        apiUrl: process.env.RENDER_EXTERNAL_URL || 'http://localhost:5000'
+    })
+})
+
+
 let userTypings = {};
 
 /** Socket IO Connections */
